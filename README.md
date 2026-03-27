@@ -6,8 +6,20 @@ Controller for kuavo 4pro maxB
 
 ### 1.1 Enable script control of Kuavo 4 pro max B
 
-1. In kuavo downstream machine, run under root:
+#### Downstream machine
 
+[Downstream machine code repository](https://gitee.com/leju-robot/kuavo-ros-opensource/tree/1.3.3/)
+
+>[NOTE]
+> For downstream machine, all commands must be executed under `root`
+> ```bash
+> # enable root
+> sudo su
+> # exit root
+> exit
+> ```
+
+In kuavo downstream machine, run under root to enable upper body control:
 ```bash
 
 cd kuavo-ros-opensource
@@ -23,9 +35,26 @@ source devel/setup.bash
 roslaunch humanoid_controllers load_kuavo_real_half_up_body.launch 
 ```
 
+
+#### Upstream machine 
+
+[Upstream machine code repository](https://gitee.com/leju-robot/kuavo_ros_application/tree/1.0.2)
+
 2. copy paste the `controller.py` in `src` to upstream machine `kuavo_ros_application/src/`, then control the robot using python.
 
-3. In kuavo upstream machine, run:
+3. In kuavo upstream machine, run camera node:
+
+```bash
+
+export DISPLAY=:2.0 # for remote connection only
+
+cd kuavo_ros_appication
+source devel/setup.bash
+roslaunch kuavo_camera cameras.launch
+
+```
+
+4. In upstream machine, run `controller.py` to control the robot using python script:
 
 ```bash
 
@@ -33,14 +62,51 @@ cd kuavo_ros_application
 
 source devel/setup.bash
 
-cd src/my_controller
+cd path/to/controller/folder
 
-python controller.py
+python3 controller.py
 
 ```
 
+### 1.2 Data collection using Quest 3 VR
 
-### 1.2 (Optional) Install H12pro teleoperation autostart node
+- [] TODO
+
+
+
+## 2. Test
+
+### 2.1 Tactile perception test:
+
+To get real-time sensor data plot and control signal data plot using GUI tool provided by BrainCo official.
+
+In downstream machine, run:
+
+```bash
+
+./BrainCo_Touch_Hand_Test_Tool
+```
+
+- click Connect, and
+  ************************************************************************
+
+                                ID: 1       PROTOCOL: MODBUS                              
+
+                                PORT: /dev/ttyUSB0       BAUDRATE: 115200                              
+
+  ************************************************************************
+- with Broadcast off
+
+- Note:
+    - `/dev/ttyUSB0` is left hand
+    - `/dev/ttyUSB1` is right hand
+
+
+
+
+## Optional Installation & Setup
+
+### 1. Install H12pro teleoperation autostart node
 
 If the H12 pro tele control is disabled, run following cmd to install the auto start node:
 ```bash
@@ -54,7 +120,26 @@ sudo su
 # In control plan, select 1.ocs2
 ```
 
+### 2. Zero-Pose Calibration
 
-## Note
+Following this [instruction](https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/3%E8%B0%83%E8%AF%95%E6%95%99%E7%A8%8B/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%85%B3%E8%8A%82%E6%A0%87%E5%AE%9A/) to calibrate zero-pose when necessary. 
 
-1. Do not recompile the workspace using something like `catkin build` or `catkin clean`.
+### 3. Switch the dex hand register information
+
+In downstream machine:
+```
+sudo python3 ~/kuavo-ros-opensource/tools/check tool/Hardware tool.py
+
+# press `o` to open developer tool
+
+# press `j` to select tactile dex hand operation
+
+# press press `1` to setup usb of dex hands
+
+# type `yes` to switch the left-right hand mapping
+```
+
+
+### 4. Tool-Chain for training and deployment
+
+Following this [instruction](https://openlet.openatom.tech/explore/journalism/detail/554977288647741440) to see how to use `data_challenge` tool-chain to train ACT/DP and deploy them in the real-world test.
