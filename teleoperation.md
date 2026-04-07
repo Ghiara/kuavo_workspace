@@ -48,16 +48,15 @@ sudo su
 
 source devel/setup.bash
 
+# # None video stream in VR
 # roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 #     ip_address:=192.168.1.115 \
 #     use_cpp_incremental_ik:=true \
 #     use_incremental_hand_orientation:=false
 
-# Debug: enable video stream display in VR
+# Enable video stream in VR
 roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch
 
-# Debug: orbbec camera
-roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_orbbec.launch
 
 ```
 - Note: The Quest3 IP in our LAN is `192.168.1.115`, double check with `sudo arp-scan -I enp2s0 192.168.1.0/24`
