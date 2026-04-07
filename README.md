@@ -42,19 +42,8 @@ roslaunch humanoid_controllers load_kuavo_real_half_up_body.launch
 
 2. copy paste the `controller.py` in `src` to upstream machine `kuavo_ros_application/src/`, then control the robot using python.
 
-3. In kuavo upstream machine, run camera node:
 
-```bash
-
-export DISPLAY=:2.0 # for remote connection only
-
-cd kuavo_ros_appication
-source devel/setup.bash
-roslaunch kuavo_camera cameras.launch
-
-```
-
-4. In upstream machine, run `controller.py` to control the robot using python script:
+3. In upstream machine, run `controller.py` to control the robot using python script:
 
 ```bash
 
@@ -70,41 +59,48 @@ python3 controller.py
 
 ### 1.2 Data collection using Quest 3 VR
 
-- [] TODO
+
+For teleoperation with Quest 3, follow the [instruction of teleoperation](teleoperation.md) to enable the VR control and data collection using rosbags.
 
 
 
-## 2. Test
 
-### 2.1 Tactile perception test:
+## 2. Model deployment using kuavo_data_challenge (dev branch)
 
-To get real-time sensor data plot and control signal data plot using GUI tool provided by BrainCo official.
 
-In downstream machine, run:
-
+### 2.1 Activate control
+In down stream machine run:
 ```bash
+cd ~/kuavo-ros-opensource-1.3.3 # Note that we use 1.3.3 to enable control
 
-./BrainCo_Touch_Hand_Test_Tool
+sudo su 
+
+source devel/setup.bash
+
+roslaunch humanoid_controllers load_kuavo_real_half_up_body.launch 
+
+# press `o` to activate control
 ```
 
-- click Connect, and
-  ************************************************************************
+### 2.2 model deployment & inference
 
-                                ID: 1       PROTOCOL: MODBUS                              
+In upstream machine, setup your configs in `~/kdc_ws/kuavo_data_challenge/`, upload your model with 1 rosbag at proper place (following the instruction of kuavo_data_challenge).
 
-                                PORT: /dev/ttyUSB0       BAUDRATE: 115200                              
+In upstream machine run:
+```bash
+cd ~/kdc_ws/kuavo_data_challenge
 
-  ************************************************************************
-- with Broadcast off
+conda activate kdc
 
-- Note:
-    - `/dev/ttyUSB0` is left hand
-    - `/dev/ttyUSB1` is right hand
+python kuavo_deploy/eval_kuavo.py
+
+# press 2 (go to first step pose in the given rosbag) 
+# then press 3 (model inference to run task)
+```
 
 
 
-
-## Optional Installation & Setup
+## Optional Installation & Setup Instructions
 
 ### 1. Install H12pro teleoperation autostart node
 
@@ -139,7 +135,30 @@ sudo python3 ~/kuavo-ros-opensource/tools/check tool/Hardware tool.py
 # type `yes` to switch the left-right hand mapping
 ```
 
+### 4. Tactile perception test:
 
-### 4. Tool-Chain for training and deployment
+To get real-time sensor data plot and control signal data plot using GUI tool provided by BrainCo official.
 
-Following this [instruction](https://openlet.openatom.tech/explore/journalism/detail/554977288647741440) to see how to use `data_challenge` tool-chain to train ACT/DP and deploy them in the real-world test.
+In downstream machine, run:
+
+```bash
+
+./BrainCo_Touch_Hand_Test_Tool
+```
+
+- click Connect, and
+  ************************************************************************
+
+        ID: 1       PROTOCOL: MODBUS                              
+
+        PORT: /dev/ttyUSB0       BAUDRATE: 115200                              
+
+  ************************************************************************
+- with Broadcast off
+
+
+
+
+### 5. Tool-Chain for training and deployment
+
+Following this [instruction](https://openlet.openatom.tech/explore/journalism/detail/562836764125958144) to see how to use `kuavo_data_challenge` to train ACT/DP and deploy them in the real-world test.
