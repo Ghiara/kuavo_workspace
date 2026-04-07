@@ -38,6 +38,7 @@ roslaunch humanoid_controllers load_kuavo_real_half_up_body.launch
 
 - follow [this video](https://www.bilibili.com/video/BV1x7CgYWE8i/?spm_id_from=888.80997.embed_other.whitelist&t=9.334561&bvid=BV1x7CgYWE8i&vd_source=73f506b74bc2d678bb1316d63d1c2983) to check how to control the robot with VR hand joystick
 
+- To configure head motion mode, modify the parameter in this json file: `kuavo-ros-opensource-1.3.3/src/manipulation_nodes/noitom_hi5_hand_udp_python/scripts/config.json` (Note: the `FIXED` mode now let robot head down towards table with target_yaw=25)
 
 ```bash
 
@@ -64,7 +65,7 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_orbbec.launch
 5. take on the quest3, check if ping latency shown at left hand (if it shows, it indicates the connection is no problem)
 
 
-> [WARNING]
+> [!WARNING]
 > following commandd may be dangerous when aligning the robot arms with your pose. Make sure there is sufficient space surrounding the robot when the first time you use the VR device, and make sure your current human arm pose stay close with robot arm pose.
 
 6. **Initial unlock arms**: In Quest3, press two front triggers for 2 - 3 secs. This will enable arm pose alignment and release arm control. 

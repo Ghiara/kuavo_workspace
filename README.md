@@ -10,7 +10,7 @@ Controller for kuavo 4pro maxB
 
 [Downstream machine code repository](https://gitee.com/leju-robot/kuavo-ros-opensource/tree/1.3.3/)
 
->[NOTE]
+>[!NOTE]
 > For downstream machine, all commands must be executed under `root`
 > ```bash
 > # enable root
