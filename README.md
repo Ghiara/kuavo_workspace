@@ -4,7 +4,14 @@ Controller for kuavo 4pro maxB
 ## 1. Hardware setup
 
 
-### 1.1 Enable script control of Kuavo 4 pro max B
+
+### 1.1 Data collection using Quest 3 VR
+
+
+For teleoperation with Quest 3, follow the [instruction of teleoperation](teleoperation.md) to enable the VR control and data collection using rosbags.
+
+
+### 1.2 Enable script control of Kuavo 4 pro max B
 
 #### Downstream machine
 
@@ -56,14 +63,6 @@ cd path/to/controller/folder
 python3 controller.py
 
 ```
-
-### 1.2 Data collection using Quest 3 VR
-
-
-For teleoperation with Quest 3, follow the [instruction of teleoperation](teleoperation.md) to enable the VR control and data collection using rosbags.
-
-
-
 
 ## 2. Model deployment using kuavo_data_challenge (dev branch)
 
