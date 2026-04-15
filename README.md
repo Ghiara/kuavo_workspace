@@ -107,7 +107,7 @@ python kuavo_deploy/eval_kuavo.py
 If the H12 pro tele control is disabled, run following cmd to install the auto start node:
 ```bash
 
-cd kuavo-ros-opensource/src/humanoid-control/h12pro_controller_node/script
+cd kuavo-ros-opensource/src/humanoid-control/h12pro_controller_node/scripts
 
 sudo su
 

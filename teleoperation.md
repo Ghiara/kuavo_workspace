@@ -4,9 +4,84 @@
 
 1. https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/2%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/VR%E6%93%8D%E4%BD%9C/5w_VR%E6%93%8D%E4%BD%9C/
 
-2. https://openlet.openatom.tech/explore/journalism/detail/554977288647741440
+2. https://openlet.openatom.tech/explore/journalism/detail/562836764125958144
 
-## Setup
+
+## Prerequisites
+
+In upstream and downstream machine, make sure:
+
+1. The camera autostart service in upstream machine is enabled:
+```bash
+
+# 上位机AGX终端执行 rs-enumerate-devices 查看左右手腕相机Device info/Serial Number
+# 终端执行 sudo vim /etc/kuavo.conf 将查到的设备号改入 CAMERA_LEFT=,CAMERA_RIGHT=
+
+sudo systemctl enable start_camera.service 
+
+```
+
+2. In downstream machine, the launch file (`kuavo-ros-opensource-1.3.3/src/manipulation_nodes/noitom_hi5_hand_udp_python/launch/launch_quest3_ik_videostream_robot_camera.launch`) is configured as follows:
+
+make sure `ip_address`, `camera_publisher_name` is setup according to the robot individual hardware.
+
+```html
+
+<launch>
+    <!-- 定义命令行参数 -->
+    <arg name="send_srv" default="1"/> <!-- 1: 不需要手动打开手臂控制，0: 需要手动打开手臂控制 -->
+    <arg name="version" default="4" />
+    <arg name="ctrl_arm_idx" default="2" />
+    <arg name="ik_type_idx" default="0" />
+    <arg name="ip_address" default="192.168.1.115" />
+    <arg name="control_torso" default="0" /> <!-- 0: do NOT control, 1: control torso  -->
+    <!-- <arg name="camera_publisher_name" default="/camera/color" /> -->
+    <arg name="camera_publisher_name" default="/cam_h/color" />
+    <arg name="hand_reference_mode" default="thumb_index"/> <!-- fingertips, middle_finger, thumb_index -->
+
+    <!-- motion_capture_ik -->
+    <node pkg="motion_capture_ik" type="ik_ros_uni.py" name="ik_ros_uni" args=" --version $(arg version) --ctrl_arm_idx $(arg ctrl_arm_idx) --ik_type_idx $(arg ik_type_idx) --send_srv=$(arg send_srv) --control_torso=$(arg control_torso) --hand_reference_mode=$(arg hand_reference_mode)" output="screen">
+    </node>
+
+    <!-- noitom_hi5_hand_udp_python -->
+    <node pkg="noitom_hi5_hand_udp_python" type="monitor_quest3.py" args="$(arg ip_address)" name="monitor_quest3" output="screen">
+    </node>
+    <node pkg="noitom_hi5_hand_udp_python" type="webrtc_videostream.py" name="webrtc_videostream" args="$(arg camera_publisher_name)" output="screen"/>
+</launch>
+```
+
+3. (optional) In downstream machine, for cpp incremental control, make sure the launch file (`kuavo-ros-opensource-1.3.3/src/manipulation_nodes/noitom_hi5_hand_udp_python/launch/launch_quest3_ik.launch`) is set as follows:
+
+make sure `ip_address`, `camera_publisher_name` is setup according to the robot individual hardware. and head camera display node in quest 3 is added.
+
+```html
+
+<launch>
+    <!-- 定义命令行参数 -->
+    <arg name="camera_publisher_name" default="/cam_h/color" />
+    <arg name="ip_address" default="192.168.1.115"/>
+
+    <arg name="version" default="4" />
+    <arg name="ctrl_arm_idx" default="2" />
+    <arg name="ik_type_idx" default="0" />
+    <arg name="control_torso" default="false" /> <!-- false: do NOT control, true: control torso  -->
+    <arg name="control_finger_type" default="0" /> <!-- 0: control all fingers by upper-gripper, 1: control thumb and index fingers by upper-gripper, control other fingers by lower-gripper  -->
+    <arg name="predict_gesture" default="false" /> <!-- True or False -->
+    <arg name="ee_type" default="qiangnao_touch"/>
+    ...
+
+<!-- Add camera video stream node  -->
+    <node pkg="noitom_hi5_hand_udp_python" type="webrtc_videostream.py" name="webrtc_videostream" args="$(arg camera_publisher_name)" output="screen"/>
+</launch>
+
+```
+
+4. The `Kuavo_Hand_Track_MR` app is installed in the Quest3 VR (https://kuavo.lejurobot.com/Quest_apks/leju_kuavo_hand-0.0.1-298-gdc7cfac.apk)
+
+Installation instruction: `https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/5%E5%8A%9F%E8%83%BD%E6%A1%88%E4%BE%8B/%E9%80%9A%E7%94%A8%E6%A1%88%E4%BE%8B/VR%E4%BD%BF%E7%94%A8%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B/`
+
+
+## Setup - use default python interface control (a bit jitter)
 
 1. connection robot and quest3 in a common LAN (this is already done): 
 
@@ -16,9 +91,7 @@ Account: TP-Link_5359_5G_YuanMeng
 Password: 70686999
 
 ```
-2. In Quest3, open and active `Kuavo-Hand-Track-MR` App.
-
-3. start downstream machine control node (for our robot with serial number P4-690):
+2. start downstream machine control node (for our robot with serial number P4-690):
 
 ```bash
 
@@ -30,11 +103,12 @@ source devel/setup.bash
 
 roslaunch humanoid_controllers load_kuavo_real_half_up_body.launch 
 
+
 # press `o` to enable control
 
 ```
 
-4. in downstream machine, run in another terminal:
+3. in downstream machine, run in another terminal:
 
 - follow [this video](https://www.bilibili.com/video/BV1x7CgYWE8i/?spm_id_from=888.80997.embed_other.whitelist&t=9.334561&bvid=BV1x7CgYWE8i&vd_source=73f506b74bc2d678bb1316d63d1c2983) to check how to control the robot with VR hand joystick
 
@@ -48,12 +122,6 @@ sudo su
 
 source devel/setup.bash
 
-# # None video stream in VR
-# roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
-#     ip_address:=192.168.1.115 \
-#     use_cpp_incremental_ik:=true \
-#     use_incremental_hand_orientation:=false
-
 # Enable video stream in VR
 roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch
 
@@ -61,7 +129,11 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.l
 ```
 - Note: The Quest3 IP in our LAN is `192.168.1.115`, double check with `sudo arp-scan -I enp2s0 192.168.1.0/24`
 
-5. take on the quest3, check if ping latency shown at left hand (if it shows, it indicates the connection is no problem)
+
+4. In Quest3, open and active `Kuavo-Hand-Track-MR` App.
+
+
+5. In App, check if ping latency shown at left hand (if it shows, it indicates the connection is no problem)
 
 
 > [!WARNING]
@@ -76,6 +148,37 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.l
 9. **Lock arms at current pose**: press `x` + `B` will lock the arms at current position.
 
 10. **Dexhand operation**: place (not press) fingers on `x` and/or `A`, will control thumb auxiliary joints. press front triggers will control the dexhand grasp pose (all fingers).
+
+
+
+## (option) Use cpp incremental control (more smooth actions)
+
+
+1. In the terminal, replace above step `3` by running following cmd:
+```bash
+
+cd kuavo-ros-opensource-1.3.3
+
+sudo su
+
+source devel/setup.bash
+
+# # None video stream in VR
+roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
+    ip_address:=192.168.1.115 \
+    use_cpp_incremental_ik:=true \
+    use_incremental_hand_orientation:=false
+
+```
+
+> [!WARNING]
+> following commandd may be dangerous when aligning the robot arms with your pose. Make sure there is sufficient space surrounding the robot when the first time you use the VR device, and make sure your current human arm pose stay close with robot arm pose.
+
+2. **switch arm control mode to 2**: press `x` + `A` **twice** to enable arm control mode switched to **`2`**. (in terminal you will see the arm control mode changed from 0 -> 1 -> 2)
+
+3. **control the robot arms using hand joysticks**: press the both side trigger, meanwhile you can use the joystick to enable the arm tracking. other operation is same as above.
+
+
 
 
 ## Rosbag Data collection
