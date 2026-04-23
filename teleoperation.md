@@ -195,7 +195,7 @@ According to the latest network scan results, the current IP address allocation 
 | **Core Router**                 | `192.168.1.1`   | `7c:f1:7e:1f:53:59` | TP-Link Core Router                       | Default |
 | **Kuavo-down Computer (Wired)** | `192.168.1.108` | `c8:a3:62:ab:99:99` | Wired connection, fixed MAC               | DHCP    |
 | **Kuavo-down Computer (Wi-Fi)** | `192.168.1.103` | `ac:82:47:d7:76:2a` | Intel NUC built-in Wi-Fi                  | Static  |
-| **Meta Quest 3 (Wired)**        | `192.168.1.101` | `14:4f:d7:da:a4:30` | Type-C to Ethernet adapter (Shanghai B&A) | DHCP    |
+| **Meta Quest 3 (Wired)**        | `192.168.1.100` | `14:4f:d7:da:a4:30` | Type-C to Ethernet adapter (Shanghai B&A) | Static  |
 | **Meta Quest 3 (Wi-Fi)**        | `192.168.1.115` | `ae:6d:64:83:17:b0` | Unknown: locally administered             | Static  |
 | **Synology NAS**                | `192.168.1.117` | `00:11:32:ba:27:d6` | Lab storage server                        | Static  |
 
@@ -225,11 +225,11 @@ sudo su
 source devel/setup.bash
 
 # python mode
-roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch ip_address:=192.168.1.101
+roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch ip_address:=192.168.1.100
 
 # cpp incremental control 
 roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
-    ip_address:=192.168.1.101 \
+    ip_address:=192.168.1.100 \
     use_cpp_incremental_ik:=true \
     use_incremental_hand_orientation:=false
 ```
