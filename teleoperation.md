@@ -2,9 +2,9 @@
 
 ## Official documentation
 
-1. https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/2%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/VR%E6%93%8D%E4%BD%9C/5w_VR%E6%93%8D%E4%BD%9C/
+1. VR Use Case Development: https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/5%E5%8A%9F%E8%83%BD%E6%A1%88%E4%BE%8B/%E9%80%9A%E7%94%A8%E6%A1%88%E4%BE%8B/VR%E4%BD%BF%E7%94%A8%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B/#quest3-vr%E6%8E%A7%E5%88%B6
 
-2. https://openlet.openatom.tech/explore/journalism/detail/562836764125958144
+2. Wired VR using case: https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/6%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/%E6%9C%89%E7%BA%BFVR%E6%96%B9%E6%A1%88%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
 
 
 ## Prerequisites
@@ -81,16 +81,10 @@ make sure `ip_address`, `camera_publisher_name` is setup according to the robot 
 Installation instruction: `https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/5%E5%8A%9F%E8%83%BD%E6%A1%88%E4%BE%8B/%E9%80%9A%E7%94%A8%E6%A1%88%E4%BE%8B/VR%E4%BD%BF%E7%94%A8%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B/`
 
 
-## Setup - use default python interface control (a bit jitter)
+## (Default) Python-based wireless VR control
 
-1. connection robot and quest3 in a common LAN (this is already done): 
+1. connection robot and quest3 in a common LAN (this is already done)
 
-```yaml
-
-Account: TP-Link_5359_5G_YuanMeng
-Password: 70686999
-
-```
 2. start downstream machine control node (for our robot with serial number P4-690):
 
 ```bash
@@ -151,7 +145,7 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.l
 
 
 
-## (option) Use cpp incremental control (more smooth actions)
+## (Option) Cpp-based wireless incremental control (more smooth actions)
 
 
 1. In the terminal, replace above step `3` by running following cmd:
@@ -179,9 +173,56 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 3. **control the robot arms using hand joysticks**: press the both side trigger, meanwhile you can use the joystick to enable the arm tracking. other operation is same as above.
 
 
+## (Recommended) Wired VR control
+
+1. Connect the wire from kuavo downstream machine to LAN router, and VR to LAN router
+
+2. Current IP address allocation - Last updated on 2026-04-22
+
+| Device Name                     | IP Address      | MAC Address         | Notes                                     | States  |
+| :------------------------------ | :-------------- | :------------------ | :---------------------------------------- | :------ |
+| **Core Router**                 | `192.168.1.1`   | `7c:f1:7e:1f:53:59` | TP-Link Core Router                       | Default |
+| **Kuavo-down Computer (Wired)** | `192.168.1.108` | `c8:a3:62:ab:99:99` | Wired connection, fixed MAC               | Static    |
+| **Kuavo-down Computer (Wi-Fi)** | `192.168.1.103` | `ac:82:47:d7:76:2a` | Intel NUC built-in Wi-Fi                  | Static  |
+| **Meta Quest 3 (Wired)**        | `192.168.1.100` | `14:4f:d7:da:a4:30` | Type-C to Ethernet adapter (Shanghai B&A) | Static  |
+| **Meta Quest 3 (Wi-Fi)**        | `192.168.1.115` | `ae:6d:64:83:17:b0` | Unknown: locally administered             | Static  |
+| **Synology NAS**                | `192.168.1.117` | `00:11:32:ba:27:d6` | Lab storage server                        | Static  |
 
 
-## Rosbag Data collection
+2. Test methods:
+```bash
+sudo apt install arp-scan # Install arp-scan for Linux
+
+# Ensure you are in the same LAN as the robot
+sudo arp-scan -I enp2s0 192.168.1.0/24 # for Ubuntu 
+sudo arp-scan -I en0 192.168.1.0/24 # for Mac
+
+# Latency test
+ping 192.168.1.108
+```
+
+
+3. Use VR wired control (python-based): 
+```bash
+cd kuavo-ros-opensource-1.3.3
+
+sudo su
+
+source devel/setup.bash
+
+# python mode
+roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch ip_address:=192.168.1.100
+
+# cpp incremental control 
+roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
+    ip_address:=192.168.1.100 \
+    use_cpp_incremental_ik:=true \
+    use_incremental_hand_orientation:=false
+```
+
+
+
+## Rosbag data collection
 
 In the downstream machine, run following script to record the rosbags:
 

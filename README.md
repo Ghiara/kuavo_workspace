@@ -3,15 +3,13 @@ Controller for kuavo 4pro maxB
 
 ## 1. Hardware setup
 
-
-
 ### 1.1 Data collection using Quest 3 VR
 
 
-For teleoperation with Quest 3, follow the [instruction of teleoperation](teleoperation.md) to enable the VR control and data collection using rosbags.
+For teleoperation with Quest 3, follow the [VR TELEOPERATION](teleoperation.md) to enable the VR control and data collection.
 
 
-### 1.2 Enable script control of Kuavo 4 pro max B
+### 1.2 Enable script control of Kuavo 4 pro max B (in-house control script)
 
 #### Downstream machine
 
