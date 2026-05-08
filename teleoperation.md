@@ -182,13 +182,16 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 | Device Name                        | IP Address      | MAC Address         |
 | :--------------------------------- | :-------------- | :------------------ |
 | **Core Router**                    | `192.168.0.1`   | `7c:f1:7e:1f:53:59` |
-| **Kuavo-down Computer (Wired)**    | `192.168.1.166` | `c8:a3:62:ab:99:99` |
+| **Kuavo-down Computer (Wired)**    | `192.168.0.166` | `c8:a3:62:ab:99:99` |
 | **Kuavo-down Computer (Wireless)** | `192.168.0.20`  | `ac:82:47:d7:76:2a` |
-| **Meta Quest 3 (Wired)**           | `192.168.1.184` | `14:4f:d7:da:a4:30` |
+| **Meta Quest 3 (Wired)**           | `192.168.0.184` | `14:4f:d7:da:a4:30` |
 | **Meta Quest 3 (Wireless)**        | `192.168.0.187` | `78:c4:fa:d3:f1:8f` |
-| **Synology NAS**                   | `192.168.0.117` | `00:11:32:ba:27:d6` |
+| **Synology NAS**                   | `192.168.0.146` | `00:11:32:ba:27:d6` |
 | **Kuavo-up Computer (Wired)**      | `Unknown`       | `Unknown`           |
 | **Kuavo-up Computer (Wireless)**   | `192.168.0.187` | `f8:3d:c6:56:f9:49` |
+| **t7875 (Wired)**                  | 192.168.0.42    | 00:e0:4c:b9:4d:c0   |
+| **t7875 (Wireless)**               | 192.168.0.193   | 58:91:cf:f6:a7:3e   |
+
 
 
 1. Test methods:
