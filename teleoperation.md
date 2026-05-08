@@ -182,12 +182,12 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 | Device Name                        | IP Address      | MAC Address         |
 | :--------------------------------- | :-------------- | :------------------ |
 | **Core Router**                    | `192.168.0.1`   | `7c:f1:7e:1f:53:59` |
-| **Kuavo-down Computer (Wired)**    | `192.168.1.108` | `c8:a3:62:ab:99:99` |
+| **Kuavo-down Computer (Wired)**    | `192.168.1.166` | `c8:a3:62:ab:99:99` |
 | **Kuavo-down Computer (Wireless)** | `192.168.0.20`  | `ac:82:47:d7:76:2a` |
-| **Meta Quest 3 (Wired)**           | `192.168.1.100` | `14:4f:d7:da:a4:30` |
+| **Meta Quest 3 (Wired)**           | `192.168.1.184` | `14:4f:d7:da:a4:30` |
 | **Meta Quest 3 (Wireless)**        | `192.168.0.187` | `78:c4:fa:d3:f1:8f` |
-| **Synology NAS**                   | `192.168.1.117` | `00:11:32:ba:27:d6` |
-| **Kuavo-up Computer (Wired)**      | `192.168.1.108` | `c8:a3:62:ab:99:99` |
+| **Synology NAS**                   | `192.168.0.117` | `00:11:32:ba:27:d6` |
+| **Kuavo-up Computer (Wired)**      | `Unknown`       | `Unknown`           |
 | **Kuavo-up Computer (Wireless)**   | `192.168.0.187` | `f8:3d:c6:56:f9:49` |
 
 
@@ -213,11 +213,11 @@ sudo su
 source devel/setup.bash
 
 # python mode
-roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch ip_address:=192.168.1.100
+roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch ip_address:=192.168.0.184
 
 # cpp incremental control 
 roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
-    ip_address:=192.168.1.100 \
+    ip_address:=192.168.0.184 \
     use_cpp_incremental_ik:=true \
     use_incremental_hand_orientation:=false
 ```
