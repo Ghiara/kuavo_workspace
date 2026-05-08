@@ -117,14 +117,14 @@ sudo su
 source devel/setup.bash
 
 # Enable video stream in VR
-roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch
+roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch ip_address:=192.168.0.245
 
 
 ```
-- Note: The Quest3 IP in our LAN is `192.168.1.115`, double check with `sudo arp-scan -I enp2s0 192.168.1.0/24`
+- Note: The Quest3 IP in our LAN is `192.168.0.245`, double check with `sudo arp-scan -I enp2s0 192.168.0.0/24`
 
 
-4. In Quest3, open and active `Kuavo-Hand-Track-MR` App.
+1. In Quest3, open and active `Kuavo-Hand-Track-MR` App.
 
 
 5. In App, check if ping latency shown at left hand (if it shows, it indicates the connection is no problem)
@@ -159,7 +159,7 @@ source devel/setup.bash
 
 # # None video stream in VR
 roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
-    ip_address:=192.168.1.115 \
+    ip_address:=192.168.0.245 \
     use_cpp_incremental_ik:=true \
     use_incremental_hand_orientation:=false
 
@@ -177,28 +177,30 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 
 1. Connect the wire from kuavo downstream machine to LAN router, and VR to LAN router
 
-2. Current IP address allocation - Last updated on 2026-04-22
+2. Current IP address allocation - Last updated on 2026-05-08
 
-| Device Name                     | IP Address      | MAC Address         | Notes                                     | States  |
-| :------------------------------ | :-------------- | :------------------ | :---------------------------------------- | :------ |
-| **Core Router**                 | `192.168.1.1`   | `7c:f1:7e:1f:53:59` | TP-Link Core Router                       | Default |
-| **Kuavo-down Computer (Wired)** | `192.168.1.108` | `c8:a3:62:ab:99:99` | Wired connection, fixed MAC               | Static    |
-| **Kuavo-down Computer (Wi-Fi)** | `192.168.1.103` | `ac:82:47:d7:76:2a` | Intel NUC built-in Wi-Fi                  | Static  |
-| **Meta Quest 3 (Wired)**        | `192.168.1.100` | `14:4f:d7:da:a4:30` | Type-C to Ethernet adapter (Shanghai B&A) | Static  |
-| **Meta Quest 3 (Wi-Fi)**        | `192.168.1.115` | `ae:6d:64:83:17:b0` | Unknown: locally administered             | Static  |
-| **Synology NAS**                | `192.168.1.117` | `00:11:32:ba:27:d6` | Lab storage server                        | Static  |
+| Device Name                        | IP Address      | MAC Address         |
+| :--------------------------------- | :-------------- | :------------------ |
+| **Core Router**                    | `192.168.0.1`   | `7c:f1:7e:1f:53:59` |
+| **Kuavo-down Computer (Wired)**    | `192.168.1.108` | `c8:a3:62:ab:99:99` |
+| **Kuavo-down Computer (Wireless)** | `192.168.0.20`  | `ac:82:47:d7:76:2a` |
+| **Meta Quest 3 (Wired)**           | `192.168.1.100` | `14:4f:d7:da:a4:30` |
+| **Meta Quest 3 (Wireless)**        | `192.168.0.187` | `78:c4:fa:d3:f1:8f` |
+| **Synology NAS**                   | `192.168.1.117` | `00:11:32:ba:27:d6` |
+| **Kuavo-up Computer (Wired)**      | `192.168.1.108` | `c8:a3:62:ab:99:99` |
+| **Kuavo-up Computer (Wireless)**   | `192.168.0.187` | `f8:3d:c6:56:f9:49` |
 
 
-2. Test methods:
+1. Test methods:
 ```bash
 sudo apt install arp-scan # Install arp-scan for Linux
 
 # Ensure you are in the same LAN as the robot
-sudo arp-scan -I enp2s0 192.168.1.0/24 # for Ubuntu 
-sudo arp-scan -I en0 192.168.1.0/24 # for Mac
+sudo arp-scan -I enp2s0 192.168.0.0/24 # for Ubuntu 
+sudo arp-scan -I en0 192.168.0.0/24 # for Mac
 
 # Latency test
-ping 192.168.1.108
+ping 192.168.0.xxx
 ```
 
 
