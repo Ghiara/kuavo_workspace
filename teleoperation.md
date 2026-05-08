@@ -189,8 +189,8 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 | **Synology NAS**                   | `192.168.0.146` | `00:11:32:ba:27:d6` |
 | **Kuavo-up Computer (Wired)**      | `Unknown`       | `Unknown`           |
 | **Kuavo-up Computer (Wireless)**   | `192.168.0.187` | `f8:3d:c6:56:f9:49` |
-| **t7875 (Wired)**                  | 192.168.0.42    | 00:e0:4c:b9:4d:c0   |
-| **t7875 (Wireless)**               | 192.168.0.193   | 58:91:cf:f6:a7:3e   |
+| **t7875 (Wired)**                  | `192.168.0.42`  | `00:e0:4c:b9:4d:c0` |
+| **t7875 (Wireless)**               | `192.168.0.193` | `58:91:cf:f6:a7:3e` |
 
 
 
