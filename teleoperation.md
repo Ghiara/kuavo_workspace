@@ -185,7 +185,7 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 | **Kuavo-down Computer (Wired)**    | `192.168.0.166` | `c8:a3:62:ab:99:99` |
 | **Kuavo-down Computer (Wireless)** | `192.168.0.20`  | `ac:82:47:d7:76:2a` |
 | **Meta Quest 3 (Wired)**           | `192.168.0.184` | `14:4f:d7:da:a4:30` |
-| **Meta Quest 3 (Wireless)**        | `192.168.0.187` | `78:c4:fa:d3:f1:8f` |
+| **Meta Quest 3 (Wireless)**        | `192.168.0.245` | `78:c4:fa:d3:f1:8f` |
 | **Synology NAS**                   | `192.168.0.146` | `00:11:32:ba:27:d6` |
 | **Kuavo-up Computer (Wired)**      | `Unknown`       | `Unknown`           |
 | **Kuavo-up Computer (Wireless)**   | `192.168.0.187` | `f8:3d:c6:56:f9:49` |
