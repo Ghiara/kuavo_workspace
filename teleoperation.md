@@ -226,6 +226,9 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 
 In the downstream machine, run following script to record the rosbags:
 
+>[!IMPORTANT]
+> Following command **DO NOT** use `root`, namely DO NOT need to type `sudo su` in the terminal.
+
 ```bash
 
 cd kuavo-ros-opensource-1.3.3
