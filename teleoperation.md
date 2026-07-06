@@ -43,6 +43,23 @@ ping 192.168.0.xxx
 
 1. Use VR wired control: 
 
+ - start downstream machine control node (for our robot with serial number P4-690):
+
+```bash
+
+cd ~/kuavo-ros-opensource-1.3.3 # Note that we use 1.3.3 to enable control
+
+sudo su 
+
+source devel/setup.bash
+
+roslaunch humanoid_controllers load_kuavo_real_half_up_body.launch 
+
+
+# press `o` to enable control
+```
+ - enable VR node
+
 ```bash
 cd kuavo-ros-opensource-1.3.3
 
