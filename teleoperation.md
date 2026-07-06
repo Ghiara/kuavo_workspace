@@ -7,7 +7,101 @@
 2. Wired VR using case: https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/6%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/%E6%9C%89%E7%BA%BFVR%E6%96%B9%E6%A1%88%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/
 
 
-## Prerequisites
+## (Default) Wired C++ Incremental Control
+
+1. Connect the wire from kuavo downstream machine to LAN router, and VR to LAN router
+
+2. Current IP address allocation - Last updated on 2026-05-08
+
+| Device Name                        | IP Address      | MAC Address         |
+| :--------------------------------- | :-------------- | :------------------ |
+| **Core Router**                    | `192.168.0.1`   | `7c:f1:7e:1f:53:59` |
+| **Kuavo-down Computer (Wired)**    | `192.168.0.166` | `c8:a3:62:ab:99:99` |
+| **Kuavo-down Computer (Wireless)** | `192.168.0.20`  | `ac:82:47:d7:76:2a` |
+| **Meta Quest 3 (Wired)**           | `192.168.0.184` | `14:4f:d7:da:a4:30` |
+| **Meta Quest 3 (Wireless)**        | `192.168.0.245` | `78:c4:fa:d3:f1:8f` |
+| **Synology NAS**                   | `192.168.0.146` | `00:11:32:ba:27:d6` |
+| **Kuavo-up Computer (Wired)**      | `Unknown`       | `Unknown`           |
+| **Kuavo-up Computer (Wireless)**   | `192.168.0.187` | `f8:3d:c6:56:f9:49` |
+| **t7875 (Wired)**                  | `192.168.0.42`  | `00:e0:4c:b9:4d:c0` |
+| **t7875 (Wireless)**               | `192.168.0.193` | `58:91:cf:f6:a7:3e` |
+
+
+
+0. (Optinal) Test methods:
+```bash
+sudo apt install arp-scan # Install arp-scan for Linux
+
+# Ensure you are in the same LAN as the robot
+sudo arp-scan -I enp2s0 192.168.0.0/24 # for Ubuntu 
+sudo arp-scan -I en0 192.168.0.0/24 # for Mac
+
+# Latency test
+ping 192.168.0.xxx
+```
+
+
+1. Use VR wired control: 
+
+```bash
+cd kuavo-ros-opensource-1.3.3
+
+sudo su
+
+source devel/setup.bash
+
+# python mode
+roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch ip_address:=192.168.0.184
+
+# cpp incremental control 
+roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
+    ip_address:=192.168.0.184 \
+    use_cpp_incremental_ik:=true \
+    use_incremental_hand_orientation:=false
+
+# take on your VR at this time
+```
+
+
+> [!WARNING]
+> following commandd may be dangerous when aligning the robot arms with your pose. Make sure there is sufficient space surrounding the robot when the first time you use the VR device, and make sure your current human arm pose stay close with robot arm pose.
+
+2. **switch arm control mode to 2**: press `x` + `A` **twice** to enable arm control mode switched to **`2`**. (in terminal you will see the arm control mode changed from 0 (init) -> 1 (safe lock) -> 2 (VR control))
+
+3. **control the robot arms using hand joysticks**: press the both side trigger, meanwhile you can use the joystick to enable the arm tracking. other operation is same as above.
+
+4. **Lock arm and back to Zero**: move the table away, let the both hand near the zero pose. Press `x` + `A` (change arm control mode from 2 -> 1), and press `x` + `A` again (1 -> 2) will return to zero pose (but may failed and get stucked) and press `x` + `A` again (2 -> 1) will lock arms.
+
+
+## Rosbag data collection
+
+In the downstream machine, run following script to record the rosbags:
+
+>[!IMPORTANT]
+> Following command **DO NOT** use `root`, namely DO NOT need to type `sudo su` in the terminal.
+
+```bash
+
+cd kuavo-ros-opensource-1.3.3
+
+source devel/setup.bash
+
+# before you start recording, configure the save path and rosbag name when necessary
+python3 src/demo/examples_code/record_data/rosbag_tool.py
+
+# In the terminal select: `recording the rosbag` to start the recording
+# press `ctrl + c` to and save the recording
+```
+
+The to be recorded topics can be configured in `kuavo-ros-opensource-1.3.3/src/demo/examples_code/record_data/record_topics.json`
+
+
+
+
+
+
+## Setup
+
 
 In upstream and downstream machine, make sure:
 
@@ -81,7 +175,9 @@ make sure `ip_address`, `camera_publisher_name` is setup according to the robot 
 Installation instruction: `https://kuavo.lejurobot.com/manual/basic_usage/kuavo-ros-control/docs/5%E5%8A%9F%E8%83%BD%E6%A1%88%E4%BE%8B/%E9%80%9A%E7%94%A8%E6%A1%88%E4%BE%8B/VR%E4%BD%BF%E7%94%A8%E5%BC%80%E5%8F%91%E6%A1%88%E4%BE%8B/`
 
 
-## (Default) Python-based wireless VR control
+
+
+## (Optional) Python-based wireless VR control
 
 1. connection robot and quest3 in a common LAN (this is already done)
 
@@ -124,7 +220,7 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.l
 - Note: The Quest3 IP in our LAN is `192.168.0.245`, double check with `sudo arp-scan -I enp2s0 192.168.0.0/24`
 
 
-1. In Quest3, open and active `Kuavo-Hand-Track-MR` App.
+4. In Quest3, open and active `Kuavo-Hand-Track-MR` App.
 
 
 5. In App, check if ping latency shown at left hand (if it shows, it indicates the connection is no problem)
@@ -145,7 +241,7 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.l
 
 
 
-## (Option) Cpp-based wireless incremental control (more smooth actions)
+## (Optional) Cpp-based wireless incremental control (more smooth actions)
 
 
 1. In the terminal, replace above step `3` by running following cmd:
@@ -171,81 +267,3 @@ roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
 2. **switch arm control mode to 2**: press `x` + `A` **twice** to enable arm control mode switched to **`2`**. (in terminal you will see the arm control mode changed from 0 -> 1 -> 2)
 
 3. **control the robot arms using hand joysticks**: press the both side trigger, meanwhile you can use the joystick to enable the arm tracking. other operation is same as above.
-
-
-## (Recommended) Wired VR control
-
-1. Connect the wire from kuavo downstream machine to LAN router, and VR to LAN router
-
-2. Current IP address allocation - Last updated on 2026-05-08
-
-| Device Name                        | IP Address      | MAC Address         |
-| :--------------------------------- | :-------------- | :------------------ |
-| **Core Router**                    | `192.168.0.1`   | `7c:f1:7e:1f:53:59` |
-| **Kuavo-down Computer (Wired)**    | `192.168.0.166` | `c8:a3:62:ab:99:99` |
-| **Kuavo-down Computer (Wireless)** | `192.168.0.20`  | `ac:82:47:d7:76:2a` |
-| **Meta Quest 3 (Wired)**           | `192.168.0.184` | `14:4f:d7:da:a4:30` |
-| **Meta Quest 3 (Wireless)**        | `192.168.0.245` | `78:c4:fa:d3:f1:8f` |
-| **Synology NAS**                   | `192.168.0.146` | `00:11:32:ba:27:d6` |
-| **Kuavo-up Computer (Wired)**      | `Unknown`       | `Unknown`           |
-| **Kuavo-up Computer (Wireless)**   | `192.168.0.187` | `f8:3d:c6:56:f9:49` |
-| **t7875 (Wired)**                  | `192.168.0.42`  | `00:e0:4c:b9:4d:c0` |
-| **t7875 (Wireless)**               | `192.168.0.193` | `58:91:cf:f6:a7:3e` |
-
-
-
-1. Test methods:
-```bash
-sudo apt install arp-scan # Install arp-scan for Linux
-
-# Ensure you are in the same LAN as the robot
-sudo arp-scan -I enp2s0 192.168.0.0/24 # for Ubuntu 
-sudo arp-scan -I en0 192.168.0.0/24 # for Mac
-
-# Latency test
-ping 192.168.0.xxx
-```
-
-
-3. Use VR wired control (python-based): 
-```bash
-cd kuavo-ros-opensource-1.3.3
-
-sudo su
-
-source devel/setup.bash
-
-# python mode
-roslaunch noitom_hi5_hand_udp_python launch_quest3_ik_videostream_robot_camera.launch ip_address:=192.168.0.184
-
-# cpp incremental control 
-roslaunch noitom_hi5_hand_udp_python launch_quest3_ik.launch \
-    ip_address:=192.168.0.184 \
-    use_cpp_incremental_ik:=true \
-    use_incremental_hand_orientation:=false
-```
-
-
-
-## Rosbag data collection
-
-In the downstream machine, run following script to record the rosbags:
-
->[!IMPORTANT]
-> Following command **DO NOT** use `root`, namely DO NOT need to type `sudo su` in the terminal.
-
-```bash
-
-cd kuavo-ros-opensource-1.3.3
-
-source devel/setup.bash
-
-# before you start recording, configure the save path and rosbag name when necessary
-python3 src/demo/examples_code/record_data/rosbag_tool.py
-
-# In the terminal select: `recording the rosbag` to start the recording
-# press `ctrl + c` to and save the recording
-```
-
-The to be recorded topics can be configured in `kuavo-ros-opensource-1.3.3/src/demo/examples_code/record_data/record_topics.json`
-
