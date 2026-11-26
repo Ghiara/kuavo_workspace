@@ -104,6 +104,26 @@ In the Quest3 browser, open the following URL:
 5. Keep your pose stable during neutral calibration and wait for the IK handoff check to pass.
 6. Once the state changes to `ACTIVE`, move your arms and individual fingers to control the robot.
 
+<table>
+  <tr>
+    <td width="300" align="center"><strong>1. Start gesture</strong></td>
+    <td width="300" align="center"><strong>2. L pose alignment</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="imgs/perfinger/start_gesture.jpeg" width="250"></td>
+    <td align="center"><img src="imgs/perfinger/l_pose_alignment.jpeg" width="250"></td>
+  </tr>
+  <tr>
+    <td align="center">Open both hands with palms up</td>
+    <td align="center">Align your arms with the robot</td>
+  </tr>
+  <tr>
+    <td align="center">Hold for 5 seconds,<br>then release for 1 second</td>
+    <td align="center">3-second preparation countdown</td>
+  </tr>
+</table>
+
+
 State transition:
 
 ```text
@@ -133,8 +153,24 @@ ACTIVE
 
 **Pause gesture**: **make a fist with both hands** and hold for 3 seconds. The robot holds its current pose when the state changes to `PAUSED_HOLD`.
 
+<table>
+  <tr>
+    <td width="300" align="center"><strong>Pause gesture</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="imgs/perfinger/fist_gesture.jpeg" width="250"></td>
+  </tr>
+  <tr>
+    <td align="center">Make a fist with both hands</td>
+  </tr>
+  <tr>
+    <td align="center">Hold for 3 seconds</td>
+  </tr>
+</table>
+
 > [!IMPORTANT]
 > The robot continues following the operator during the 3-second pause countdown.
+
 
 State transition:
 
@@ -151,6 +187,30 @@ PAUSED_HOLD
 3. Wait for the precheck and for the robot to move to the L pose.
 4. **Align your arms with the robot arms** during the 3-second preparation countdown and wait for neutral calibration and the IK handoff check to pass.
 5. Resume control once the state changes to `ACTIVE`.
+
+<table>
+  <tr>
+    <td width="300" align="center"><strong>1. Pause teleoperation</strong></td>
+    <td width="300" align="center"><strong>2. Resume gesture</strong></td>
+    <td width="300" align="center"><strong>3. L pose alignment</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="imgs/perfinger/fist_gesture.jpeg" width="250"></td>
+    <td align="center"><img src="imgs/perfinger/start_gesture.jpeg" width="250"></td>
+    <td align="center"><img src="imgs/perfinger/l_pose_alignment.jpeg" width="250"></td>
+  </tr>
+  <tr>
+    <td align="center">Make a fist with both hands</td>
+    <td align="center">Open both hands with palms up</td>
+    <td align="center">Align your arms with the robot</td>
+  </tr>
+  <tr>
+    <td align="center">Hold for 3 seconds</td>
+    <td align="center">Hold for 5 seconds,<br>then release for 1 second</td>
+    <td align="center">3-second preparation countdown</td>
+  </tr>
+</table>
+
 
 State transition:
 
@@ -179,6 +239,30 @@ ACTIVE
 4. **Confirm exit**: **make a fist with both hand** and hold for 3 seconds.
 5. Wait for the robot to return to the home pose through the L, T_BENT and T poses.
 6. The system requests arm control mode 1, turns off the adapter and returns to `WAITING_FOR_START`.
+
+<table>
+  <tr>
+    <td width="300" align="center"><strong>1. Pause teleoperation</strong></td>
+    <td width="300" align="center"><strong>2. Request exit</strong></td>
+    <td width="300" align="center"><strong>3. Confirm exit</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="imgs/perfinger/fist_gesture.jpeg" width="250"></td>
+    <td align="center"><img src="imgs/perfinger/pinch_gesture.jpeg" width="250"></td>
+    <td align="center"><img src="imgs/perfinger/fist_gesture.jpeg" width="250"></td>
+  </tr>
+  <tr>
+    <td align="center">Make a fist with both hands</td>
+    <td align="center">Perform the pinch gesture</td>
+    <td align="center">Make a fist with both hands</td>
+  </tr>
+  <tr>
+    <td align="center">Hold for 3 seconds</td>
+    <td align="center">Hold for 2 seconds,<br>then release for 1 second</td>
+    <td align="center">Hold for 3 seconds</td>
+  </tr>
+</table>
+
 
 State transition:
 
