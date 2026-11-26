@@ -5,6 +5,8 @@ Controller for kuavo 4pro maxB
 
 >[!IMPORTANT]
 > For teleoperation with Quest 3, follow the [VR TELEOPERATION](teleoperation.md) to enable the VR control and data collection.
+>
+> For per-finger teleoperation with Quest 3 using WebXR hand tracking, follow the [PER-FINGER VR TELEOPERATION](teleoperation_perfinger.md) to enable individual finger control and data collection.
 
 
 ## 2. Model deployment using kuavo_data_challenge (dev branch)
